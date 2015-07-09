@@ -1,0 +1,37 @@
+<!--Published by JAX-WS RI (http://jax-ws.java.net). RI's version is JAX-WS RI 2.2.9-b130926.1035 svn-revision#5f6196f2b90e9460065a4c2f4e30e065b245e51e.-->
+<xs:schema version="1.0" targetNamespace="http://products.nozama.com/" xmlns:tns="http://products.nozama.com/" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+   <xs:element name="addProduct" type="tns:addProduct"/>
+   <xs:element name="getProduct" type="tns:getProduct"/>
+   <xs:element name="getProductResponse" type="tns:getProductResponse"/>
+   <xs:element name="getProducts" type="tns:getProducts"/>
+   <xs:element name="getProductsResponse" type="tns:getProductsResponse"/>
+   <xs:complexType name="getProduct">
+      <xs:sequence>
+         <xs:element name="id" type="xs:long"/>
+      </xs:sequence>
+   </xs:complexType>
+   <xs:complexType name="getProductResponse">
+      <xs:sequence>
+         <xs:element name="return" type="tns:product" minOccurs="0"/>
+      </xs:sequence>
+   </xs:complexType>
+   <xs:complexType name="product">
+      <xs:sequence>
+         <xs:element name="id" type="xs:long"/>
+         <xs:element name="name" type="xs:string"/>
+      </xs:sequence>
+   </xs:complexType>
+   <xs:complexType name="addProduct">
+      <xs:sequence>
+         <xs:element name="product" type="tns:product"/>
+      </xs:sequence>
+   </xs:complexType>
+   <xs:complexType name="getProducts">
+      <xs:sequence/>
+   </xs:complexType>
+   <xs:complexType name="getProductsResponse">
+      <xs:sequence>
+         <xs:element name="return" type="tns:product" minOccurs="0" maxOccurs="unbounded"/>
+      </xs:sequence>
+   </xs:complexType>
+</xs:schema>
