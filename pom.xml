@@ -6,44 +6,124 @@
 	<version>1.0.0</version>
 	<packaging>pom</packaging>
 	<modules>
-		<module>assignment-1</module>
+		<module>core</module>
+		<module>orders</module>
+		<module>products</module>
+		<module>orders-webapp</module>
+		<module>products-webapp</module>
+		<module>assignment-5-tests</module>
+		<module>inventory</module>
+		<module>cust-emailer</module>
 	</modules>
 	<properties>
+
+		<!-- CHANGE THIS TO POINT TO YOUR OWN INSTANCE -->
+
+		<glassfish.home>C:\Dev\glassfish4\glassfish</glassfish.home>
+
+		<!-- THIS DISABLES RUNNING INTEGRATION TESTS THROUGH MVN COMMANDS -->
+		
+		<skipMavenTests>true</skipMavenTests>
+
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<maven.compiler.target>1.7</maven.compiler.target>
 		<maven.compiler.source>1.7</maven.compiler.source>
-		<arquillian-version>1.1.8.Final</arquillian-version>
-		<arquillian-wildfly-version>8.1.0.Final</arquillian-wildfly-version>
+		<jackson-version>2.3.2</jackson-version>
+		<jersey-version>2.10.4</jersey-version>
+		<rest-assured-version>2.4.1</rest-assured-version>
 	</properties>
 	<dependencyManagement>
 		<dependencies>
 			<dependency>
-				<groupId>javax</groupId>
-				<artifactId>javaee-api</artifactId>
-				<version>7.0</version>
+				<groupId>org.glassfish.jersey.containers</groupId>
+				<artifactId>jersey-container-servlet</artifactId>
+				<version>${jersey-version}</version>
 			</dependency>
 			<dependency>
-				<groupId>junit</groupId>
-				<artifactId>junit</artifactId>
-				<version>4.12</version>
+				<groupId>com.fasterxml.jackson.core</groupId>
+				<artifactId>jackson-annotations</artifactId>
+				<version>${jackson-version}</version>
 			</dependency>
 			<dependency>
-				<groupId>org.jboss.arquillian</groupId>
-				<artifactId>arquillian-bom</artifactId>
-				<version>${arquillian-version}</version>
-				<scope>import</scope>
-				<type>pom</type>
+				<groupId>com.fasterxml.jackson.jaxrs</groupId>
+				<artifactId>jackson-jaxrs-json-provider</artifactId>
+				<version>${jackson-version}</version>
 			</dependency>
 			<dependency>
-				<groupId>org.wildfly</groupId>
-				<artifactId>wildfly-arquillian-container-embedded</artifactId>
-				<version>${arquillian-wildfly-version}</version>
+				<groupId>com.jayway.restassured</groupId>
+				<artifactId>rest-assured</artifactId>
+				<version>${rest-assured-version}</version>
+				<scope>test</scope>
 			</dependency>
 			<dependency>
-				<groupId>org.wildfly</groupId>
-				<artifactId>wildfly-embedded</artifactId>
-				<version>${arquillian-wildfly-version}</version>
+				<groupId>com.jayway.restassured</groupId>
+				<artifactId>json-path</artifactId>
+				<version>${rest-assured-version}</version>
+				<scope>test</scope>
 			</dependency>
 		</dependencies>
 	</dependencyManagement>
+	<dependencies>
+		<dependency>
+			<groupId>javax</groupId>
+			<artifactId>javaee-api</artifactId>
+			<version>7.0</version>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<version>4.12</version>
+			<scope>test</scope>
+		</dependency>
+	</dependencies>
+	<build>
+		<pluginManagement>
+			<plugins>
+				<plugin>
+					<groupId>org.glassfish.maven.plugin</groupId>
+					<artifactId>maven-glassfish-plugin</artifactId>
+					<version>2.1</version>
+					<configuration>
+						<glassfishDirectory>${glassfish.home}</glassfishDirectory>
+						<domain>
+							<name>domain1</name>
+							<adminPort>4848</adminPort>
+							<reuse>true</reuse>
+						</domain>
+						<autoCreate>false</autoCreate>
+						<terse>true</terse>
+						<debug>false</debug>
+						<echo>true</echo>
+						<user>admin</user>
+						<passwordFile>${glassfish.home}\domains\domain1\config\admin-keyfile</passwordFile>
+						<components>
+							<component>
+								<name>${project.build.finalName}</name>
+								<artifact>${project.build.directory}/${project.build.finalName}.war</artifact>
+							</component>
+						</components>
+					</configuration>
+				</plugin>
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-war-plugin</artifactId>
+					<version>2.6</version>
+					<configuration>
+						<failOnMissingWebXml>false</failOnMissingWebXml>
+					</configuration>
+				</plugin>
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-surefire-plugin</artifactId>
+					<version>2.18.1</version>
+					<configuration>
+						<skipTests>${skipMavenTests}</skipTests>
+						<forkCount>1</forkCount>
+						<redirectTestOutputToFile>false</redirectTestOutputToFile>
+					</configuration>
+				</plugin>
+			</plugins>
+		</pluginManagement>
+	</build>
 </project>
